@@ -1,1 +1,42 @@
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2c lcd(0*27,16,2);
 
+int pirSensor = 7;
+int buzz = 8;
+void setup() {
+  serial.begin(9600);
+  pinMode(pirSensor, INPUT);
+  pinMode(buzz, OUTPUT);
+    lcd.init();
+    lcd.backlight();
+    lcd.setCursor(2,0);
+    lcd.print("DETEKSI GERAKAN");
+    lcd.print("By NOCIL");
+    lcd.setCursor(3,2);
+    lcd.print("2210631170141");
+
+    deley(4000);
+    lcd.clear();
+}
+void loop() {
+  int sensorValue = digitalRead(pirSensor);
+  serial.println(sensorValue);
+    lcd.setCursor(6,0);
+    lcd.print("DETEKSI");
+  if (sensorValue == 1) {
+    digitalWrite(buzz, HIGH);
+
+  lcd.setCursor(4,1);
+    lcd.print("ADA GERAKAN");
+  }
+
+  else{
+    digitalWrite(buzz, LOW);
+    lcd.setCursor(5,1);
+    lcd.print("TIDAK ADA");
+    lcd.setCursor(6,2);
+    lcd.print("GERAKAN");
+  }
+  delay(500);
+  lcd.clear();
+}
