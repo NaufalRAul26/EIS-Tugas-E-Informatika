@@ -1,0 +1,119 @@
+#include <Adafruit_Sensor.h>
+#include <DHT_U.h>
+#include <WiFi.h>
+#include <PubSubClient.h>
+#include <ESP32Servo.h> // Include the Servo library
+#include <FastLED.h> // Include the FastLED library
+
+// Defining Pins
+#define DHTΡΙΝ 12
+#define LED 26
+#define SERVO PIN 2 // Servo motor pin
+#define LED PIN 4 // NS2812 LED strip pin
+#define NUM LEDS 16 // Number of LEDs in the strip
+
+//DHT parameters
+#define DHTΤΥΡΕ DHT22 //DHT 11
+DHT_Unified dht (OHTPIN, DHTTYPE);
+uint32 t delayMS;
+
+//Servo motor
+Servo servo;
+
+// WS2812 LED strip
+CRGB leds [NUM_LEDS];
+
+//MQTT Credentials
+const char* ssid "Wok-GUEST"; // Setting your AP SSID
+const char password""; // Setting your AP PSK
+const char nottServer "broker.hivemq.com";
+// const chan muttUserName "bqzbdodo";
+// const char mattPwd "SoUZW ON2WD8";
+const char clientID "ujaisldaaasdfgh; laslksdjal"; // Client ID username
+const char topic "Tempdata"; // Publish topic
+
+// Parameters for using non-blocking delay
+unsigned long previousMillise;
+const long interval 1000;
+String msgstr "";       //MQTT message buffer
+float temp, hum;
+
+// Setting up WIFI and MOTT client
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+void setup wifi() {
+delay(10);
+WiFi.begin(ssid, password);
+while (WiFi.status() != WL_CONNECTED) (
+  delay(500);
+  Serial.print(".");
+  }
+Serial.println("");
+Serial.println("WiFi connected"); 
+Serial.println("IP address: ");
+Serial.println(WiFi.localIP());
+}
+
+void reconnect() {
+  while (!client.connected()) {
+    if (client.connect(clientID)) {
+      Serial.println("MQTT connected");
+      client.subscribe("lights");
+      client.subscribe("servo"); // Subscribe to serve topic
+      client.subscribe("lights/neopixel"); // Subscribe to neopixel topi
+      Serial.println("Topic Subscribed");
+  }
+  else {
+    Serial.print("failed, rce");
+    Serial.print(client.state());
+    Serial.println(" try again in 5 seconds");
+    delay(5000); // wait 5sec and retry
+    }
+  }
+}
+
+//Subscribe callback
+void callback(char* topic, byte payload, unsigned int length) {
+  Serial.nrint("Message arrived in topic:");
+  Serial.print("Message arrived in topic: ");
+  Serial.println(topic);
+  Serial.print("Message: ");
+  String data;
+  for (int i=0; i < length; i++) {
+   ( Serial.print((char)payload[i]);
+    data += (char)payload[1];
+  }
+  Serial.println();
+  Serial.print("Message size: ");
+  Serial.println(length); 
+  Serial.println();
+  Serial.println("-----------------------");
+  Serial.println();
+
+  if (String(topic) == "lights") {
+    if (data == "ON") {
+      ( Serial.println("LED");
+      digitalurite(LED, HIGH);
+    }
+    else {
+    digitalWrite(LED, LOW);
+    }
+  }
+ else if (String(topic) "servo") {
+  int degree data.toint(); // Convert the received data to an intege
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
