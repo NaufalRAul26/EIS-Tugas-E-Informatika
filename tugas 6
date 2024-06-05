@@ -1,0 +1,20 @@
+
+// Definisikan pin untuk sensor PIR
+int pirPin = 2;    // Pin data sensor PIR dihubungkan ke pin digital 2
+
+void setup() {
+  pinMode(pirPin, INPUT);   // Atur pin pirPin sebagai input
+  Serial.begin(9600);       // Inisialisasi komunikasi serial untuk debugging
+}
+
+void loop() {
+  int pirState = digitalRead(pirPin);  // Baca data dari sensor PIR
+
+  if (pirState == HIGH) {              // Jika sensor mendeteksi gerakan
+    Serial.println("Gerakan terdeteksi!");  // Tampilkan pesan di Serial Monitor
+  } else {
+    Serial.println("Tidak ada gerakan.");  // Tampilkan pesan di Serial Monitor
+  }
+
+  delay(1000);  // Tunggu 1 detik sebelum membaca lagi
+}
